@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>oc-font</title>
+  <link rel="stylesheet" href="app/main.css">
+</head>
+<body>
+  <script src="node_modules/three/build/three.js"></script>
+  <script src="node_modules/three/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- <script type="module" src="app/main.js"></script> -->
+  
+  <script type="module">
+    
+    async function load() {
+      return fetch('./data/23-018E2.json')
+      .then(res => res.text())
+      .then(text => { console.log(text); return text; }) // debug out
+      .then(text => text.replace(/\/\/.*/g, '')) // remove comments
+      .then(text => text.replace(/0x[0-9a-fA-F]*/g, x => parseInt(x,16))) // convert hex literals to decimals
+      .then(text => JSON.parse(text))
+      .then(data => data.bytes);
+    }
+    
+    (async function main() {
+      let bytes = await load();
+      console.log(bytes);
+    })();
+    
+  </script>
+</body>
+</html>
