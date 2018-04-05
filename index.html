@@ -9,82 +9,11 @@
   
   <!-- <a href="https://www.pcjs.org/devices/pc8080/rom/vt100/" target="_blank">https://www.pcjs.org/devices/pc8080/rom/vt100/</a><br> -->
   
-  <script src="node_modules/three/build/three.js"></script>
-  <script src="node_modules/three/examples/js/controls/OrbitControls.js"></script>
-  <!-- <script type="module" src="app/main.js"></script> -->
-  
-  <script type="module">
-    let bytes;
-    let ctx;
-    
-    async function load() {
-      return fetch('./data/23-018E2.json')
-      .then(res => res.text())
-      .then(text => { console.log(text); return text; }) // debug out
-      .then(text => text.replace(/\/\/.*/g, '')) // remove comments
-      .then(text => text.replace(/0x[0-9a-fA-F]*/g, x => parseInt(x,16))) // convert hex literals to decimals
-      .then(text => JSON.parse(text))
-      .then(data => data.bytes);
-    }
-    
-    function getCharDataBytes(charCode) {
-      let offset = charCode * 16;
-      return bytes.slice( offset, offset + 10 );
-    }
-    
-    function bytesToBinary(bytes) {
-      return bytes.reduce( (acc, octet) => {
-        for (let i=7; i>=0; i--) {
-          acc.push( (octet >> i) & 1 ); // NOTE: pushes bits MSB first
-        }
-        return acc;
-      }, []);
-    }
-    
-    // returns binary pixels: 8 width x 10 height
-    function getCharData(charCode) {
-      let bytes = getCharDataBytes(charCode);
-      return bytesToBinary( bytes );
-    }
-    
-    function drawChar(charCode, x, y, height = 10, aspect = 1) {
-      let ch = getCharData(charCode);
-      for (let j=0; j<10; j++) {
-        for (let i=0; i<8; i++) {
-          if ( ch[j*8+i] ) {
-            ctx.fillRect(x + i*height/10*aspect, y + j*height/10, height/10*aspect, height/10);
-          }
-        }
-      }
-    }
-    
-    (async function main() {
-      bytes = await load();
-      console.log(bytes);
-      
-      let canvas = document.querySelector('canvas');
-      canvas.width = 1280;
-      canvas.height = 800;
-      ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'white';
-      
-      // let b = getCharData(66);
-      // console.log(b);
-      let size = 20;
-      let pad = 0.4;
-      ctx.translate((canvas.width - 16*size*(1+pad))/2, (canvas.height - 8*size*(1+pad))/2);
-      for (let j=0; j<8; j++) {
-        for (let i=0; i<16; i++) {
-          drawChar( j*16+i, i*size*(1+pad), j*size*(1+pad), size, 0.5 );
-        }
-      }
-      
-    })();
-    
-    
-    
-  </script>
+  <!-- <script src="node_modules/three/build/three.js"></script> -->
+  <!-- <script src="node_modules/three/examples/js/controls/OrbitControls.js"></script> -->
+  <script type="module" src="app/main.js"></script>
   
   <canvas style="image-rendering:pixelated;"></canvas>
+  
 </body>
 </html>
