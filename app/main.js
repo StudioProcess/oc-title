@@ -32,24 +32,29 @@ function getCharData(charCode) {
   return bytesToBinary( bytes );
 }
 
-function drawChar(charCode, x, y, height = 10, aspect = 1) {
+function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0) {
   let ch = getCharData(charCode);
   for (let j=0; j<10; j++) {
     for (let i=0; i<8; i++) {
-      if ( ch[j*8+i] ) {
-        ctx.fillRect(x + i*height/10*aspect, y + j*height/10, height/10*aspect, height/10);
-      }
+      if ( ch[j*8+i] ) { ctx.fillStyle = 'white'; } else { ctx.fillStyle = 'black'; }
+      ctx.fillRect(
+        x + i*height/10*aspect * (1+spacing),
+        y + j*height/10 * (1+spacing),
+        height/10*aspect, height/10);
     }
   }
 }
 
-function drawText(text, ox, oy, height = 10, aspect = 1) {
+function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
   let x = 0;
   let y = 0; // number of newlines (LF) encountered
   for (let i=0; i<text.length; i++) {
     let ch = text.charCodeAt(i);
     if ( ch === 10 ) { x=0; y++; continue; }
-    drawChar( ch, ox + x*height*aspect, oy + y*height, height, aspect );
+    drawChar( ch, 
+      ox + x*height*aspect*(1+spacing),
+      oy + y*height*(1+spacing),
+      height, aspect, spacing );
     x++;
   }
 }
@@ -62,8 +67,8 @@ function drawText(text, ox, oy, height = 10, aspect = 1) {
   console.log(src);
   
   let canvas = document.querySelector('canvas');
-  canvas.width = 2500;
-  canvas.height = 3000;
+  canvas.width = 4000;
+  canvas.height = 2000;
   ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
@@ -76,6 +81,8 @@ function drawText(text, ox, oy, height = 10, aspect = 1) {
   //   }
   // }
   
-  drawText(rom, 100, 100, size, 0.5);
-  drawText(src, 1500, 300, size, 0.5);
+  // drawText(rom, 100, 100, size, 0.5);
+  // drawText(src, 1500, 300, size, 0.5);
+  
+  drawText("OPEN\nCODES", 300, 300, 300, 1.0, 1.0);
 })();
