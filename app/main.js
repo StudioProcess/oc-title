@@ -1,11 +1,11 @@
-let src;
+let src, rom;
 let bytes;
 let ctx;
 
 async function load() {
   return fetch('./data/23-018E2.json')
     .then(res => res.text())
-    .then(text => { src = text; console.log(text); return text; })
+    .then(text => { rom = text; console.log(text); return text; })
     .then(text => text.replace(/\/\/.*/g, '')) // remove comments
     .then(text => text.replace(/0x[0-9a-fA-F]*/g, x => parseInt(x,16))) // convert hex literals to decimals
     .then(text => JSON.parse(text))
@@ -58,9 +58,12 @@ function drawText(text, ox, oy, height = 10, aspect = 1) {
   bytes = await load();
   console.log(bytes);
   
+  src = await fetch('./app/main.js').then(res => res.text());
+  console.log(src);
+  
   let canvas = document.querySelector('canvas');
-  canvas.width = 1280;
-  canvas.height = 1280*2.2;
+  canvas.width = 2500;
+  canvas.height = 3000;
   ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
@@ -73,5 +76,6 @@ function drawText(text, ox, oy, height = 10, aspect = 1) {
   //   }
   // }
   
-  drawText(src, 100, 100, size, 0.5);
+  drawText(rom, 100, 100, size, 0.5);
+  drawText(src, 1500, 300, size, 0.5);
 })();
