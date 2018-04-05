@@ -47,12 +47,12 @@
       return bytesToBinary( bytes );
     }
     
-    function drawChar(charCode, x, y, height = 10) {
+    function drawChar(charCode, x, y, height = 10, aspect = 1) {
       let ch = getCharData(charCode);
       for (let j=0; j<10; j++) {
         for (let i=0; i<8; i++) {
           if ( ch[j*8+i] ) {
-            ctx.fillRect(x + i*height/10, y + j*height/10, height/10, height/10);
+            ctx.fillRect(x + i*height/10*aspect, y + j*height/10, height/10*aspect, height/10);
           }
         }
       }
@@ -70,12 +70,12 @@
       
       // let b = getCharData(66);
       // console.log(b);
-      let size = 30;
+      let size = 20;
       let pad = 0.4;
       ctx.translate((canvas.width - 16*size*(1+pad))/2, (canvas.height - 8*size*(1+pad))/2);
       for (let j=0; j<8; j++) {
         for (let i=0; i<16; i++) {
-          drawChar( j*16+i, i*size*(1+pad), j*size*(1+pad), size );
+          drawChar( j*16+i, i*size*(1+pad), j*size*(1+pad), size, 0.5 );
         }
       }
       
