@@ -32,6 +32,28 @@ function getCharData(charCode) {
   return bytesToBinary( bytes );
 }
 
+function getLineData(text) {
+  let line = [ [],[],[],[],[],[],[],[],[],[] ]; // ten 'scanlines' per text line
+  for (let i=0; i<text.length; i++) {
+    let data = getCharData( text.charCodeAt(i) );
+    for (let s=0; s<10; s++) { line[s] = line[s].concat( data.slice(s*8, s*8+8) ); }
+  }
+  return line;
+}
+
+function getTextData(text) {
+  let lines = text.split('\n');
+  return lines.reduce( (acc, line) => acc.concat(getLineData(line)), [] );
+}
+
+function getString(text, zero = '0', one = '1') {
+  let data = getTextData(text);
+  return data.reduce( (acc, scanline) => {
+    acc.push( scanline.map( b => b ? one : zero).join('') );
+    return acc;
+  }, []).join('\n');
+}
+
 function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0) {
   let ch = getCharData(charCode);
   for (let j=0; j<10; j++) {
@@ -67,8 +89,8 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
   console.log(src);
   
   let canvas = document.querySelector('canvas');
-  canvas.width = 4000;
-  canvas.height = 2000;
+  canvas.width = 4200;
+  canvas.height = 2200;
   ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
@@ -84,5 +106,9 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
   // drawText(rom, 100, 100, size, 0.5);
   // drawText(src, 1500, 300, size, 0.5);
   
-  drawText("OPEN\nCODES", 300, 300, 300, 1.0, 1.0);
+  // drawText('OPEN\nCODES', 300, 300, 300, 1.0, 1.0);
+  
+  let title = getString('OPEN \nCODES', 'O', 'I');
+  console.log(title);
+  drawText(title, 100, 100, 100);
 })();
