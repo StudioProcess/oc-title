@@ -108,7 +108,8 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
   
   // drawText('OPEN\nCODES', 300, 300, 300, 1.0, 1.0);
   
-  let title = getString('OPEN \nCODES', 'O', 'I');
+  let title = getString('OPEN \nCODES', '\\', '/');
+  // let title = getString('OPEN \nCODES', String.fromCharCode(18), String.fromCharCode(25));
   console.log(title);
   drawText(title, 100, 100, 100);
 })();
