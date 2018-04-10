@@ -26,11 +26,35 @@ function bytesToBinary(bytes) {
   }, []);
 }
 
-// returns binary pixels: 8 width x 10 height
-function getCharData(charCode) {
+// returns array[80] of binary pixels: 8 width x 10 height
+function getRawCharData(charCode) {
   let bytes = getCharDataBytes(charCode);
+  console.log(charCode, bytes);
   return bytesToBinary( bytes );
 }
+
+// returns array[100] of binary pixels: 10 width x 10 height
+function getCharData(charCode, dot_replication = false, dot_stretching = false) {
+  let raw = getRawCharData(charCode);
+  let out = [];
+  let pbit = 0; // previous bit on scanline
+  for (let j=0; j<10; j++) {
+    for (let i=0; i<8; i++) {
+      let bit = raw[j*8+i]; // current bit
+      // output current bit
+      if (dot_stretching && pbit) { out.push(1); }
+      else { out.push(bit); }
+      pbit = bit;
+    }
+    // output two extra bits
+    if (dot_replication && pbit) { out.push(1, 1); } 
+    else { out.push(0, 0); }
+    pbit = 0;
+  }
+  console.log(out);
+  return out;
+}
+
 
 function getLineData(text) {
   let line = [ [],[],[],[],[],[],[],[],[],[] ]; // ten 'scanlines' per text line
@@ -54,11 +78,11 @@ function getString(text, zero = '0', one = '1') {
   }, []).join('\n');
 }
 
-function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0) {
-  let ch = getCharData(charCode);
+function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0, dot_replication = false, dot_stretching = false) {
+  let ch = getCharData(charCode, dot_replication, dot_stretching);
   for (let j=0; j<10; j++) {
-    for (let i=0; i<8; i++) {
-      if ( ch[j*8+i] ) { ctx.fillStyle = 'white'; } else { ctx.fillStyle = 'black'; }
+    for (let i=0; i<10; i++) {
+      if ( ch[j*10+i] ) { ctx.fillStyle = 'white'; } else { ctx.fillStyle = 'black'; }
       ctx.fillRect(
         x + i*height/10*aspect * (1+spacing),
         y + j*height/10 * (1+spacing),
@@ -67,16 +91,16 @@ function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0) {
   }
 }
 
-function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
+function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0, dot_replication = false, dot_stretching = false) {
   let x = 0;
   let y = 0; // number of newlines (LF) encountered
   for (let i=0; i<text.length; i++) {
     let ch = text.charCodeAt(i);
     if ( ch === 10 ) { x=0; y++; continue; }
     drawChar( ch, 
-      ox + x*height*aspect*(1+spacing),
-      oy + y*height*(1+spacing),
-      height, aspect, spacing );
+      ox + x*height*aspect * (1+spacing),
+      oy + y*height * (1+spacing),
+      height, aspect, spacing, dot_replication, dot_stretching);
     x++;
   }
 }
@@ -111,5 +135,7 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0) {
   let title = getString('OPEN \nCODES', '\\', '/');
   // let title = getString('OPEN \nCODES', String.fromCharCode(18), String.fromCharCode(25));
   console.log(title);
-  drawText(title, 100, 100, 100);
+  // drawText(title, 100, 100, 100);
+  drawText(String.fromCharCode(18) + String.fromCharCode(18), 0, 0, 1000,    1, 0, true, false);
+  drawText('Ij', 0, 1100, 1000,   1, 0, false, true );
 })();

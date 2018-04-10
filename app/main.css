@@ -14,6 +14,6 @@ body {
 canvas {
   width: 100vh !important;
   height: auto !important;
-  /* background-color: grey; */
+  background-color: grey;
   image-rendering:pixelated;
 }
