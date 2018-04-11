@@ -62,7 +62,7 @@ function getLineData(text) {
   let line = [ [],[],[],[],[],[],[],[],[],[] ]; // ten 'scanlines' per text line
   for (let i=0; i<text.length; i++) {
     let data = getCharData( text.charCodeAt(i) );
-    for (let s=0; s<10; s++) { line[s] = line[s].concat( data.slice(s*8, s*8+8) ); }
+    for (let s=0; s<10; s++) { line[s] = line[s].concat( data.slice(s*10, s*10+10) ); }
   }
   return line;
 }
@@ -134,12 +134,13 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0, dot_replic
   
   // drawText('OPEN\nCODES', 300, 300, 300, 1.0, 1.0);
   
-  // let title = getString('OPEN \nCODES', '\\', '/');
-  // let title = getString('OPEN \nCODES', String.fromCharCode(18), String.fromCharCode(25));
+  let headline = 'code\ncamp';
+  // let title = getString(headline, '\\', '/');
+  let title = getString(headline, String.fromCharCode(31), String.fromCharCode(1));
   // console.log(title);
-  // drawText(title, 100, 100, 100);
+  drawText(title, 0, 0, 100);
   
-  drawText(String.fromCharCode(25) + String.fromCharCode(16), 0, 0, 1000,    1.0, 0, true, false);
-  drawText('AB', 0, 1100, 1000,   1, 0, false, false );
+  // drawText(String.fromCharCode(25) + String.fromCharCode(16), 0, 0, 1000,    1.0, 0, true, false);
+  // drawText('code camp', 0, 1100, 1000,   1, 0, false, false );
 
 })();
