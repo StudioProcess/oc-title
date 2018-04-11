@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 let src, rom;
 let bytes;
 let ctx;
@@ -84,11 +85,13 @@ function drawChar(charCode, x, y, height = 10, aspect = 1, spacing = 0, dot_repl
   let ch = getCharData(charCode, dot_replication, dot_stretching);
   for (let j=0; j<10; j++) {
     for (let i=0; i<10; i++) {
-      if ( ch[j*10+i] ) { ctx.fillStyle = 'white'; } else { ctx.fillStyle = 'black'; }
-      ctx.fillRect(
-        x + i*height/10*aspect * (1+spacing),
-        y + j*height/10 * (1+spacing),
-        height/10*aspect, height/10);
+      if ( ch[j*10+i] ) { 
+        ctx.fillStyle = 'black'; 
+        ctx.fillRect(
+          x + i*height/10*aspect * (1+spacing),
+          y + j*height/10 * (1+spacing),
+          height/10*aspect, height/10);
+      }
     }
   }
 }
@@ -115,12 +118,9 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0, dot_replic
   console.log(src);
   
   let canvas = document.querySelector('canvas');
-  canvas.width = 4200;
-  canvas.height = 2200;
   ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
-  let size = 20;
   // let pad = 0.4;
   // ctx.translate((canvas.width - 16*size*(1+pad))/2, (canvas.height - 8*size*(1+pad))/2);
   // for (let j=0; j<8; j++) {
@@ -134,13 +134,47 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0, dot_replic
   
   // drawText('OPEN\nCODES', 300, 300, 300, 1.0, 1.0);
   
-  let headline = 'code\ncamp';
-  // let title = getString(headline, '\\', '/');
-  let title = getString(headline, String.fromCharCode(31), String.fromCharCode(1));
-  // console.log(title);
-  drawText(title, 0, 0, 100);
+  let h1 = ' code\n camp';
+  let h2 = ' camp\n code';
   
+  let t1 = getString(h1, String.fromCharCode(31), String.fromCharCode(1)); // dot+star
+  let t2 = getString(h1, String.fromCharCode(31), String.fromCharCode(25)); // dot+vertical
+  let t3 = getString(h1, String.fromCharCode(31), '\\'); // dot+backslash
+  let t4 = getString(h1, String.fromCharCode(31), '>'); // dot+>
+  let t5 = getString(h1, String.fromCharCode(31), String.fromCharCode(2)); // dot+ cursor
+  let t6 = getString(h1, String.fromCharCode(31), '('); // dot+ (
+  
+  let t7 = getString(h1, '\\', '/');
+  let t8 = getString(h1, '/', '\\');
+  
+  let t9 = getString(h1, '0', '1');
+  let t10 = getString(h1, String.fromCharCode(25), String.fromCharCode(15));
+  let t11 = getString(h1, String.fromCharCode(13), String.fromCharCode(11));
+  let t12 = getString(h1, String.fromCharCode(60), String.fromCharCode(62));
+  let t13 = getString(h1, ' ', String.fromCharCode(42));
+  
+  let t14 = getString(h1, 'O', 'I');
+  let t15 = getString(h1, 'I', 'O');
+  let t16 = getString(h1, '[', ']');
+  
+  // console.log(title);
+  
+  let size = 100;
+  let cellx = 10 * size * 5;
+  let celly = 10 * size * 2;
+  canvas.width = cellx * 1;
+  canvas.height = celly * 1;
+  // drawText(title1, 0, celly, size, 1, 0, true, false);
+  // drawText(title2, 0, 0, size, 1, 0, true, false);
+  // drawText(title3, 0, celly*2, size, 1, 0, true, false);
+  // 
+  // drawText(title4, cellx, 0, size, 1, 0, true, false);
+  // drawText(title5, cellx, celly, size, 1, 0, true, false);
+  // drawText(title6, cellx, celly*2, size, 1, 0, true, false);
+    
   // drawText(String.fromCharCode(25) + String.fromCharCode(16), 0, 0, 1000,    1.0, 0, true, false);
   // drawText('code camp', 0, 1100, 1000,   1, 0, false, false );
+  
+  drawText(t16, 0, 0, size, 1, 0, true, false);
 
 })();
