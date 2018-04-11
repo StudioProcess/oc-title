@@ -14,7 +14,9 @@ async function load() {
 
 function getCharDataBytes(charCode) {
   let offset = charCode * 16;
-  return bytes.slice( offset, offset + 10 );
+  // return bytes.slice( offset, offset + 10 );
+  // Perform a -1 shift (first line is at offset+16, second at offset, third at offset+1, ... )
+  return [bytes[offset+15]].concat( bytes.slice( offset, offset + 9 ) );
 }
 
 function bytesToBinary(bytes) {
@@ -132,10 +134,12 @@ function drawText(text, ox, oy, height = 10, aspect = 1, spacing = 0, dot_replic
   
   // drawText('OPEN\nCODES', 300, 300, 300, 1.0, 1.0);
   
-  let title = getString('OPEN \nCODES', '\\', '/');
+  // let title = getString('OPEN \nCODES', '\\', '/');
   // let title = getString('OPEN \nCODES', String.fromCharCode(18), String.fromCharCode(25));
-  console.log(title);
+  // console.log(title);
   // drawText(title, 100, 100, 100);
-  drawText(String.fromCharCode(18) + String.fromCharCode(18), 0, 0, 1000,    1, 0, true, false);
-  drawText('Ij', 0, 1100, 1000,   1, 0, false, true );
+  
+  drawText(String.fromCharCode(25) + String.fromCharCode(16), 0, 0, 1000,    1.0, 0, true, false);
+  drawText('AB', 0, 1100, 1000,   1, 0, false, false );
+
 })();
